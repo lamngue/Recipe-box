@@ -32,7 +32,7 @@ class AddButton extends React.Component{
 		const recipe = {
 			name: this.state.recipeName,
 			ingredients: this.state.ingredients,
-			count: (this.props.recipeList.length)-1
+			count: (this.props.recipeList.length)
 		}
 		this.props.addRecipe(recipe);
 		this.closeModal();

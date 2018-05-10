@@ -2,7 +2,6 @@ import React, { Component } from 'react';
 import logo from './logo.svg';
 import './App.css';
 import AddButton from "./components/AddButton/AddButton";
-import DisplayArea from "./components/DisplayArea/DisplayArea";
 import EditRecipe from "./components/EditRecipe/EditRecipe";
 import { Panel, Well, Button } from 'react-bootstrap';
 
@@ -18,25 +17,35 @@ class App extends Component {
   addNewRecipe = (newRecipe) => {
     this.setState({
       recipe: [...this.state.recipe,newRecipe]
-    });
+    },this.saveToLocal);
   }
 
   editRecipe = (recipe) => {
     let selectedRecipe = this.state.recipe.find(obj => obj.count=== recipe.count)
     let editedRecipe = Object.assign(selectedRecipe,recipe);
-    this.setState(Object.assign(this.state.recipe,editedRecipe))
+    this.setState(Object.assign(this.state.recipe,editedRecipe),this.saveToLocal)
   }
 
   deleteRecipe = (recipe) => {
     let arr = this.state.recipe.filter(obj => obj.count !== recipe.count);
-    this.setState({recipe: arr});
+    this.setState({recipe: arr},this.saveToLocal);
   }
+
+  componentDidMount(){
+    const recipe = JSON.parse(localStorage.getItem("recipe"));
+    this.setState({recipe});
+  }
+
+   saveToLocal = () => {
+     const local = this.state.recipe;
+     localStorage.setItem("recipe", JSON.stringify(local));
+    }
 
   displayRecipe = () => {
     let recipes = this.state.recipe.map(recipe => {
-      let ingredientsList = recipe.ingredients.split(",");
+      let ingredientsList = recipe.ingredients.replace(/\s+/g,'').split(",");
       return (
-        <Panel id="collapsible-panel-example-2" defaultClosedbsStyle="info">
+        <Panel id="collapsible-panel-example-2" defaultClosed bsStyle="info">
           <Panel.Heading>
             <Panel.Title toggle>
               {recipe.name}
@@ -62,8 +71,8 @@ class App extends Component {
     return (
       <div className="App background">
         <h1 className="text-center"> RECIPE BOX </h1>
-        <Well className="well" bsSize="large">
-            {this.displayRecipe()}
+        <Well>
+          {this.displayRecipe()}
         </Well>
         <AddButton addRecipe ={this.addNewRecipe} 
          recipeList = {this.state.recipe}/>
