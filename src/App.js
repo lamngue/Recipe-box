@@ -31,15 +31,18 @@ class App extends Component {
     this.setState({recipe: arr},this.saveToLocal);
   }
 
-  componentDidMount(){
-    const recipe = JSON.parse(localStorage.getItem("recipe"));
-    this.setState({recipe});
-  }
-
    saveToLocal = () => {
      const local = this.state.recipe;
      localStorage.setItem("recipe", JSON.stringify(local));
     }
+
+  componentDidMount(){
+    if(!localStorage.getItem("recipe")){
+      localStorage.setItem("recipe", JSON.stringify(this.state.recipe));
+    }
+    const recipe = JSON.parse(localStorage.getItem("recipe"));
+    this.setState({recipe});
+  }
 
   displayRecipe = () => {
     let recipes = this.state.recipe.map(recipe => {
