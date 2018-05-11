@@ -46,7 +46,7 @@ class App extends Component {
 
   displayRecipe = () => {
     let recipes = this.state.recipe.map(recipe => {
-      let ingredientsList = recipe.ingredients.replace(/\s+/g,'').split(",");
+      let ingredientsList = recipe.ingredients.split(",");
       return (
         <Panel id="collapsible-panel-example-2" defaultClosed bsStyle="info">
           <Panel.Heading>
